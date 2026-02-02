@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/open-xyz/vgx/pkg/types"
+	"github.com/rohansx/vgx/pkg/types"
 )
 
 // ContextualScanRequest represents the request to the OpenAI API for contextual scanning

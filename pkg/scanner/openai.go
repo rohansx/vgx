@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/open-xyz/vgx/pkg/types"
+	"github.com/rohansx/vgx/pkg/types"
 	openai "github.com/sashabaranov/go-openai"
 )
 

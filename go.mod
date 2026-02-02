@@ -1,4 +1,4 @@
-module github.com/open-xyz/vgx
+module github.com/rohansx/vgx
 
 go 1.23.0
 

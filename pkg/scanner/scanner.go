@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/open-xyz/vgx/pkg/cache"
-	"github.com/open-xyz/vgx/pkg/types"
+	"github.com/rohansx/vgx/pkg/cache"
+	"github.com/rohansx/vgx/pkg/types"
 )
 
 // ScanFiles scans multiple files for security vulnerabilities

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/open-xyz/vgx/pkg/scanner"
-	"github.com/open-xyz/vgx/pkg/types"
+	"github.com/rohansx/vgx/pkg/scanner"
+	"github.com/rohansx/vgx/pkg/types"
 )
 
 type ScanRequest struct {

@@ -13,10 +13,10 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/open-xyz/vgx/pkg/context"
-	"github.com/open-xyz/vgx/pkg/detection"
-	"github.com/open-xyz/vgx/pkg/scanner"
-	"github.com/open-xyz/vgx/pkg/types"
+	"github.com/rohansx/vgx/pkg/context"
+	"github.com/rohansx/vgx/pkg/detection"
+	"github.com/rohansx/vgx/pkg/scanner"
+	"github.com/rohansx/vgx/pkg/types"
 )
 
 const version = "2.0.0"

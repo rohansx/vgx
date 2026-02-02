@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/open-xyz/vgx/pkg/types"
+	"github.com/rohansx/vgx/pkg/types"
 )
 
 var (
