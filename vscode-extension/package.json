@@ -1,0 +1,81 @@
+{
+  "name": "vgx",
+  "displayName": "VGX - AI Code Security",
+  "description": "Detect AI-generated code and security vulnerabilities",
+  "version": "0.1.0",
+  "publisher": "rohansx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rohansx/vgx"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "copilot",
+    "security",
+    "code analysis",
+    "vibe coding"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vgx.detectFile",
+        "title": "VGX: Detect AI Code in File"
+      },
+      {
+        "command": "vgx.detectWorkspace",
+        "title": "VGX: Detect AI Code in Workspace"
+      },
+      {
+        "command": "vgx.scanFile",
+        "title": "VGX: Security Scan File"
+      }
+    ],
+    "configuration": {
+      "title": "VGX",
+      "properties": {
+        "vgx.aiThreshold": {
+          "type": "number",
+          "default": 70,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "AI detection confidence threshold (0-100)"
+        },
+        "vgx.highlightAICode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Highlight AI-generated code in editor"
+        },
+        "vgx.showInlineConfidence": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show AI confidence inline"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.55.0",
+    "typescript": "^5.3.0"
+  }
+}

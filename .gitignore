@@ -23,3 +23,15 @@ go.work.sum
 
 # env file
 .env
+
+# VS Code Extension
+vscode-extension/out/
+vscode-extension/node_modules/
+*.vsix
+
+# Reports
+reports/*.html
+reports/*.json
+
+# Binaries (keep in releases)
+# vgx

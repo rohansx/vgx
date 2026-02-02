@@ -1,162 +1,158 @@
-# VGX
+# VGX — AI Code Security Scanner
 
-A Git pre-commit security scanner with OpenAI and VibePenTester integration to detect vulnerabilities before they enter your codebase.
+<p align="center">
+  <img src="https://img.shields.io/badge/version-2.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/github/stars/rohansx/vgx?style=social" alt="Stars">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
+</p>
+
+**VGX** is an open-source security scanner for AI-assisted development. It detects AI-generated code, scans for vulnerabilities, and integrates with your pre-commit workflow.
 
 ## Features
 
-- 🔍 **Pre-commit scanning**: Automatically scan staged files before each commit
-- 🤖 **AI-powered analysis**: Leverage OpenAI to detect complex security vulnerabilities
-- 🛡️ **Semgrep integration**: Use rule-based scanning alongside AI detection
-- 🔌 **VibePenTester integration**: Connect with VibePenTester for enhanced security analysis
-- 🧠 **Contextual awareness**: Analyzes changes with full codebase context for more accurate results
-- 📊 **Security reporting**: Generate comprehensive security reports for audits
-- ⚡ **Fast & lightweight**: Written in Go for maximum performance
-- 🔌 **Extensible**: Easy to customize and extend for your specific needs
+- 🤖 **AI Code Detection** — Identify AI-generated code (Copilot, Cursor, Claude)
+- 🔒 **Security Scanning** — Vulnerability detection via Semgrep + optional OpenAI
+- 🪝 **Pre-commit Hooks** — Block insecure code before it's committed
+- 📊 **Reports** — HTML & JSON vulnerability reports
+- 🐳 **Docker Support** — Run anywhere
 
-## Installation
+## Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/open-xyz/vgx.git
-cd vgx
+# Install
+curl -sSL https://vgx.sh/install | bash
 
-# Install the CLI
-make install
+# Or with Go
+go install github.com/rohansx/vgx@latest
 
-# Add Go bin to your PATH if needed
-echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.bashrc
-source ~/.bashrc
+# Detect AI-generated code
+vgx detect --path ./src
+
+# Security scan
+vgx scan
 ```
 
-## Basic Usage
+## AI Code Detection
+
+VGX uses stylometry and pattern analysis to detect AI-generated code — no API keys required.
 
 ```bash
-# Run a scan on staged files
-vgx
+$ vgx detect --path ./src
 
-# Specify files to scan
-vgx file1.js file2.py
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  VGX AI Code Detection
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Scan only changed files with context (default)
-vgx --changes=true
+  Files scanned:     12
+  AI-generated:      4
+  Human-written:     8
+  AI percentage:     33.2%
+  Max AI confidence: 89%
 
-# Scan all files (not just changes)
-vgx --changes=false
+  FILES
+     🤖 src/api/handlers.ts                         89%
+     🤖 src/utils/fetch.ts                          82%
+     🤖 src/components/Modal.tsx                    76%
+     🤖 src/hooks/useAuth.ts                        71%
+     ✓ src/index.ts                                 34%
+     ✓ src/config.ts                                28%
+     ...
 
-# Generate a security report after scanning
-vgx --report=true
-
-# Update the codebase context after scanning
-vgx --update-context=true
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🤖 4 file(s) detected as AI-generated
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## VibePenTester CLI Tool
-
-The VibePenTester integration includes a dedicated CLI tool for scanning files and generating reports:
+## Security Scanning
 
 ```bash
-# Scan files and display results
-vibe scan file1.js file2.py
+# Scan changed files (default)
+vgx scan
 
-# Scan a directory (non-recursive)
-vibe scan ./src
+# Scan all files
+vgx scan --changes=false
 
-# Scan directories recursively
-vibe scan -recursive ./src ./lib
-
-# Save scan results to a JSON file
-vibe scan -output results.json ./src
-
-# Generate HTML report from scan results
-vibe report -input results.json -output report.html
-
-# Generate Markdown report
-vibe report -input results.json -format markdown -output report.md
+# Scan specific file
+vgx scan src/auth.ts
 ```
 
-## Set Up Pre-commit Hook
+### Pre-commit Hook
 
 ```bash
-# Navigate to your repository
-cd /path/to/your/repo
-
-# Install the pre-commit hook
-mkdir -p .git/hooks
-cat > .git/hooks/pre-commit << 'EOF'
-#!/bin/sh
-vgx
-EOF
-chmod +x .git/hooks/pre-commit
+# Add to .git/hooks/pre-commit
+#!/bin/bash
+vgx scan --changes=true
 ```
 
-## Bypassing the Hook (Emergency Override)
-
-**Emergency Override:** To bypass the pre-commit hook in urgent situations:
+Or use the install script:
 
 ```bash
-git commit -m "Critical fix" --no-verify
+vgx install-hook
 ```
+
+## Detection Methods
+
+| Method | Accuracy | Description |
+|--------|----------|-------------|
+| Stylometry | 75-85% | Naming patterns, indentation, comment density |
+| Pattern Matching | 80-90% | Known AI code signatures |
+| Telemetry | 99% | IDE extension (coming soon) |
 
 ## Configuration
 
-- Create a `.env` file in your project root based on the example:
+VGX works out of the box. For custom settings:
 
 ```bash
-cp .env.example .env
-# Edit the .env file with your API keys
+# Optional: Enhanced scanning with OpenAI
+export OPENAI_API_KEY=sk-...
+
+# Semgrep rules (auto-detected)
+export SEMGREP_RULES=p/security-audit
 ```
 
-### Available Configuration Options
+## Commands
 
-| Environment Variable   | Description                         | Default                    |
-| ---------------------- | ----------------------------------- | -------------------------- |
-| `OPENAI_API_KEY`       | OpenAI API key for AI analysis      | Required for OpenAI        |
-| `DISABLE_OPENAI`       | Set to `true` to disable OpenAI     | `false`                    |
-| `VIBE_ENABLED`         | Enable VibePenTester integration    | `false`                    |
-| `VIBE_API_KEY`         | API key for VibePenTester           | Required for VibePenTester |
-| `VIBE_SERVER_URL`      | URL of VibePenTester service        | `http://localhost:5050`    |
-| `VIBE_SCAN_SCOPE`      | Scan scope (url, domain, subdomain) | `url`                      |
-| `VIBE_TIMEOUT_SECONDS` | Timeout for VibePenTester requests  | `60`                       |
-| `VIBE_UPLOAD_LOGS`     | Upload scan logs to VibePenTester   | `false`                    |
-
-## VibePenTester Integration
-
-VGX integrates with [VibePenTester](https://github.com/yourusername/vibe_pen_tester) for enhanced security analysis:
-
-1. Ensure VibePenTester is running locally or on a remote server
-2. Configure the integration in your `.env` file:
-   ```
-   VIBE_ENABLED=true
-   VIBE_API_KEY=your-vibepentester-api-key
-   VIBE_SERVER_URL=http://your-vibepentester-server:5050
-   ```
-3. Run VGX as usual - it will now also include VibePenTester analysis results
-
-This integration combines the strengths of rule-based scanning (Semgrep), AI analysis (OpenAI), and VibePenTester's comprehensive security testing capabilities.
-
-## Development
-
-```bash
-# Build the CLI
-make build
-
-# Run tests
-make test
-
-# Build Docker image
-make docker-build
 ```
+vgx <command> [options]
+
+Commands:
+  scan      Security scan (vulnerabilities, secrets)
+  detect    Detect AI-generated code
+  version   Print version
+  help      Show help
+
+Detect Options:
+  --path, -p     Path to scan (default: .)
+  --format, -f   Output: text, json (default: text)
+  --threshold    AI detection threshold 0-100 (default: 70)
+
+Scan Options:
+  --changes      Scan only changed files (default: true)
+  --report       Generate HTML/JSON report (default: true)
+```
+
+## VS Code Extension
+
+Coming soon — real-time AI code highlighting in your editor.
+
+## Why VGX?
+
+- **Privacy-first**: Code never leaves your machine (unless you enable OpenAI)
+- **Fast**: Rule-based analysis, no ML inference required
+- **Open source**: Audit, modify, self-host
 
 ## Contributing
 
-```bash
-# Fork the repository
-# Create your feature branch (git checkout -b feature/amazing-feature)
-# Commit your changes (git commit -m 'Add some amazing feature')
-# Push to the branch (git push origin feature/amazing-feature)
-# Open a Pull Request
-```
+PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-- Distributed under the MIT License. See `LICENSE` for more information.
+MIT — see [LICENSE](LICENSE)
+
+---
+
+<p align="center">
+  <a href="https://vgx.sh">Website</a> •
+  <a href="https://github.com/rohansx/vgx/issues">Issues</a> •
+  <a href="https://twitter.com/rohansx">Twitter</a>
+</p>
